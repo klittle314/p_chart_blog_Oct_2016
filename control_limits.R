@@ -1,6 +1,8 @@
 #Kevin Little, Ph.D. 23 October 2016
 #calculations used in Blog post on p charts
 library(openxlsx)
+library(ggplot2)
+
 df2 <- read.xlsx("datafile.xlsx",cols=c(1:15), rows=c(1:16), sheet=2)
 df2$date <- as.Date(df2$date, origin="1899-12-30")
 
@@ -51,3 +53,19 @@ p15 <- p14 + geom_line(aes(x=date,y=UCLI),linetype="longdash",color="blue")+
   annotate("text",x=as.Date("2016-01-25"),y=35,label="LCL: Ind.chart")
   
 p15
+
+#plot run chart
+median1 <- round(median(df9$per.cent),1)
+
+
+p16 <- ggplot(data=df9, aes(x=date,y=per.cent))+
+  geom_line()+
+  geom_point(size=rel(2))+
+  theme_bw()+
+  #ylim(30,90)+
+  ylab("per cent")+
+  geom_hline(yintercept=median(median1))+
+  xlab("Month")+
+  ggtitle(paste0("Run chart of listened to question;  median = ",median1," %"))
+
+p16
